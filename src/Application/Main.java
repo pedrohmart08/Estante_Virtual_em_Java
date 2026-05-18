@@ -97,8 +97,8 @@ public class Main {
 			else {
 				System.out.println("Opção invalida. ");
 			}
-			
 		}
+		sc.close();
 	}
 
 }
