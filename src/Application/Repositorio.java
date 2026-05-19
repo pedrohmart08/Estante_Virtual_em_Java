@@ -13,7 +13,7 @@ public class Repositorio {
 		l.setId(contadorId++);
 		bd.add(l);
 	}
-
+//PRECISO REFATORAR ISSO
 //	Mostra todas as obras
 	public void read() {
 		if(bd.isEmpty()) {

@@ -23,7 +23,7 @@ public class App extends Application {
         Button btnAdicionar = new Button("Adicionar Livro");
         Button btnRemover = new Button("Remover Livro");
         Button btnAtualizar = new Button("Atualizar");
-        Button btnBuscar = new Button("Buscar");
+//        Button btnBuscar = new Button("Buscar");
 
         hbOpcoes.getChildren().addAll(btnAdicionar, btnRemover, btnAtualizar);
 
@@ -57,6 +57,9 @@ public class App extends Application {
                     hbErro.getChildren().add(new Label("Ops! Preencha todos os campos."));
                 } else {
                     Livro novoLivro = new Livro(fdNomeLivro.getText(), fdAutor.getText(), checkLido.isSelected());
+                    fdNomeLivro.setText("");
+                    fdAutor.setText("");
+                    checkLido.setSelected(false);
                     r.create(novoLivro);
                     r.read();
                 }
@@ -154,13 +157,68 @@ public class App extends Application {
                 containerPrincipal.getChildren().addAll(hbOpcoes);
             });
         });
+        btnAtualizar.setOnAction(e ->{
+        	containerPrincipal.getChildren().clear();
+        	VBox containerUpdate = new VBox(20);
+        	
+        	HBox hbId = new HBox(10);
+        	Label lblId = new Label("Insira o Id da obra: ");
+        	TextField fieldId = new TextField();
+        	hbId.getChildren().addAll(lblId, fieldId);
+        	
+        	HBox hbTitulo = new HBox(10);
+        	Label lblTitulo = new Label("Insira o titulo atualizado da obra: ");
+        	TextField fieldTitulo = new TextField();
+        	hbTitulo.getChildren().addAll(lblTitulo, fieldTitulo);
+        	
+        	
+        	HBox hbAutor = new HBox(10);
+        	Label lblAutor = new Label("Insira o autor atualizado da obra: ");
+        	TextField fieldAutor = new TextField();
+        	hbAutor.getChildren().addAll(lblAutor, fieldAutor);
+        	
+        	HBox hbLido = new HBox(10);
+        	CheckBox lido = new CheckBox("Lido");
+        	Button btnUpdate = new Button("Atualizar");
+        	hbLido.getChildren().addAll(lido);
+        	Button btnVoltar = new Button("Voltar");
+        	HBox hbErro = new HBox();
+        	//Container de botoes
+        	HBox hbAcoes = new HBox(10);
+            hbAcoes.getChildren().addAll(btnUpdate, btnVoltar);
+        	
+        	containerUpdate.getChildren().addAll(hbId, hbTitulo ,hbAutor, hbLido, hbErro, hbAcoes);
+        	containerPrincipal.getChildren().addAll(containerUpdate);
+        	
+        	btnUpdate.setOnAction(a -> {
+        		if(fieldId.getText().isBlank()||fieldTitulo.getText().isBlank() || fieldAutor.getText().isBlank()) {
+        			hbErro.getChildren().add(new Label("Ops! Preencha todos os campos."));
+        		}else {
+        			hbErro.getChildren().clear();
+        			r.update(Integer.parseInt(fieldId.getText()), fieldAutor.getText(), fieldTitulo.getText(), lido.isSelected());
+            		fieldId.setText("");
+            		fieldAutor.setText("");
+            		fieldTitulo.setText("");
+            		lido.setSelected(false);
+        		}
+        		
+        	});
+        	btnVoltar.setOnAction(a -> {
+                containerPrincipal.getChildren().clear();
+                containerPrincipal.getChildren().addAll(hbOpcoes);
+            });
+        });
         
-        
+//        REFATORAR CODIGO DO REPOSITORIO ANTES DE EXIBIR LIVROS NA TELA
+//        Label lbl = new Label(r.read());
+//        containerPrincipal.getChildren().add(lbl);
         Scene scene = new Scene(containerPrincipal, 400, 300);
         primaryStage.setTitle("Minha Biblioteca");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+
 
     public static void main(String[] args) {
         launch(args);
