@@ -1,8 +1,9 @@
-package Application;
+package application;
 
 import java.util.Scanner;
 
-import Objects.Livro;
+import model.Livro;
+import repository.Repositorio;
 
 public class Main {
 

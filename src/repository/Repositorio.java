@@ -1,7 +1,7 @@
-package Application;
+package repository;
 
-import Objects.Livro;
 import java.util.List;
+import model.Livro;
 import java.util.ArrayList;
 
 public class Repositorio {
@@ -15,14 +15,15 @@ public class Repositorio {
 	}
 	
 	public String read() {
+		StringBuilder s = new StringBuilder();
 		if(bd.isEmpty()) {
-			return "Não há livros registrados. \n";
-		}else {
-			for(Livro l: bd) {
-				return l.toString();
-			}
+			return "Repositório vazio";
 		}
-		return "";
+		for(Livro l: bd) {
+			s.append(l.toString());
+		}
+		return s.toString();
+		
 	}
 
 	public String buscarPorTitulo(String t) {
@@ -35,12 +36,15 @@ public class Repositorio {
 	}
 
 	public String buscarPorAutor(String a) {
-	    for (Livro l : bd) {
-	        if (l.getAutor().equalsIgnoreCase(a)) {
-	            return l.toString();
-	        }
-	    }
-	    return "Não há livros registrados com esse autor.\n";
+		StringBuilder s = new StringBuilder();
+		if(bd.isEmpty()) {
+			return "Repositório vazio";
+		}
+		for(Livro l: bd) {
+			if(l.getAutor().equals(a))
+			s.append(l.toString());
+		}
+		return s.toString();
 	}
 	
 	public String buscarPorId(int id) {
