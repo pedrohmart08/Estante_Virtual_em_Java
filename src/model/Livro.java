@@ -1,4 +1,4 @@
-package Objects;
+package model;
 
 public class Livro {
 
@@ -49,6 +49,6 @@ public class Livro {
 
 	@Override
 	public String toString() {
-		return "Livro [id=" + id + ", titulo=" + titulo + ", autor=" + autor + ", lido=" + lido + "]";
+		return "Livro [id=" + id + ", titulo=" + titulo + ", autor=" + autor + ", lido=" + lido + "]\n";
 	}
 }
