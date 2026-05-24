@@ -9,8 +9,7 @@ Aplicação de desktop para organização de livros, você pode cadastrar, remov
 
 ## Instalação e execução
 
-Com o Java(verifique se é a versão 17+) já instalado em sua maquina você deve instalar o SDK do JavaFX(Atente-se ao detalhe de fazer o download da 21.0.11) em https://openjfx.io/
-após isso devemos identificar onde está o caminho de nossa instalação copie ele, dentro da pasta do projeto abra o terminal e digite\
+Com o Java (verifique se é a versão 17+) já instalado em sua máquina, você deve instalar o SDK do JavaFX (atente-se ao detalhe de fazer o download da versão 21.0.1) em https://openjfx.io/. Após isso, devemos identificar o caminho da nossa instalação. Copie-o, abra o terminal dentro da pasta do projeto e digite:
 Linux/macOS
 ```bash
 #Verifique a versão do Java
@@ -29,7 +28,7 @@ javac --module-path "<caminho_javafx>\lib" --add-modules javafx.controls,javafx.
 java --module-path "<caminho_javafx>\lib" --add-modules javafx.controls,javafx.graphics -cp bin application.App
 ```
 ## Contribuição
-são sempre bem-vindas! Se você encontrou um bug ou tem sugestões de melhorias:
+Contribuições são sempre bem-vindas! Se você encontrou um bug ou tem sugestões de melhorias:
 1. Abra uma Issue relatando o problema.
 2. Faça um Fork do projeto, crie uma Branch para sua modificação e envie um Pull Request.
 
