@@ -45,3 +45,5 @@ Button{
 .text-field{
 	-fx-min-height:25px;
 }
+.mensagem-erro { -fx-text-fill: red; }
+.mensagem-ok   { -fx-text-fill: green; }

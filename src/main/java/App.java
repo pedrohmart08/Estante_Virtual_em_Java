@@ -47,6 +47,16 @@ public class App extends Application {
         hb.getChildren().addAll(new Label(rotulo), campo);
         return hb;
     }
+    private void exibirErro(Label lbl, String msg) {
+        lbl.getStyleClass().removeAll("mensagem-ok");
+        lbl.getStyleClass().add("mensagem-erro");
+        lbl.setText(msg);
+    }
+     private void exibirSucesso(Label lbl, String msg) {
+        lbl.getStyleClass().removeAll("mensagem-erro");
+        lbl.getStyleClass().add("mensagem-ok");
+        lbl.setText(msg);
+    }	
 
 //    Telas
 
@@ -94,11 +104,12 @@ public class App extends Application {
         TextField fdAutor  = new TextField();
         fdAutor.getStyleClass().add("text-field");
         CheckBox  checkLido = new CheckBox("Lido");
-        Label     lblErro   = new Label();
+        Label     lblMensagem  = new Label();
         Button    btnAdd    = new Button("Adicionar");
         Button    btnVoltar = new Button("Voltar");
 
         HBox hbAcoes = new HBox(10);
+        btnVoltar.getStyleClass().add("btnPrincipais");
         hbAcoes.getChildren().addAll(btnAdd, btnVoltar);
 
         container.getChildren().addAll(
@@ -106,23 +117,22 @@ public class App extends Application {
             campoForm("Autor: ",  fdAutor),
             checkLido,
             hbAcoes,
-            lblErro
+            lblMensagem
         );
 
         btnAdd.setOnAction(e -> {
             if (fdTitulo.getText().isBlank() || fdAutor.getText().isBlank()) {
-                lblErro.setText("Ops! Preencha todos os campos.");
+                exibirErro(lblMensagem, "Ops! Preencha todos os campos.");
             } else {
                 repositorio.create(new Livro(fdTitulo.getText(), fdAutor.getText(), checkLido.isSelected()));
                 fdTitulo.clear();
                 fdAutor.clear();
                 checkLido.setSelected(false);
-                lblErro.setText("");
+                exibirSucesso(lblMensagem, "Livro adicionado com sucesso!");
             }
         });
 
         btnVoltar.setOnAction(e -> navegar(telaMenu()));
-        btnVoltar.getStyleClass().add("btnPrincipais");
         return container;
     }
 
@@ -133,7 +143,7 @@ public class App extends Application {
         fdId.getStyleClass().add("text-field");
         TextField fdTitulo = new TextField();
         fdTitulo.getStyleClass().add("text-field");
-        Label     lblErro     = new Label();
+        Label     lblMensagem  = new Label();
         HBox      hbCampoAtivo = new HBox();
         final String[] modo   = {""};
 
@@ -145,49 +155,49 @@ public class App extends Application {
         HBox hbModo  = new HBox(10);
         HBox hbAcoes = new HBox(10);
         hbModo .getChildren().addAll(btnPorId, btnPorTitulo);
+        btnVoltar.getStyleClass().add("btnPrincipais");
         hbAcoes.getChildren().addAll(btnRemover, btnVoltar);
 
-        container.getChildren().addAll(hbModo, hbCampoAtivo, hbAcoes, lblErro);
+        container.getChildren().addAll(hbModo, hbCampoAtivo, hbAcoes, lblMensagem);
 
         btnPorId.setOnAction(e -> {
             modo[0] = "id";
             hbCampoAtivo.getChildren().setAll(campoForm("ID: ", fdId));
             fdId.clear();
-            lblErro.setText("");
+            lblMensagem.setText("");
         });
 
         btnPorTitulo.setOnAction(e -> {
             modo[0] = "titulo";
             hbCampoAtivo.getChildren().setAll(campoForm("Título: ", fdTitulo));
             fdTitulo.clear();
-            lblErro.setText("");
+            lblMensagem.setText("");
         });
 
         btnRemover.setOnAction(e -> {
-            lblErro.setText("");
+        	lblMensagem.setText("");
             switch (modo[0]) {
                 case "id" -> {
                     try {
                         repositorio.delete(Integer.parseInt(fdId.getText()));
-                        navegar(telaMenu());
+                        exibirSucesso(lblMensagem, "Livro removido com sucesso!");
                     } catch (NumberFormatException ex) {
-                        lblErro.setText("ID inválido! Digite apenas números.");
+                    	exibirErro(lblMensagem, "ID inválido! Digite apenas números.");
                     }
                 }
                 case "titulo" -> {
                     if (fdTitulo.getText().isBlank()) {
-                        lblErro.setText("Digite um título válido.");
+                        exibirErro(lblMensagem, "Digite um título válido.");
                     } else {
                         repositorio.delete(fdTitulo.getText());
-                        navegar(telaMenu());
+                        exibirSucesso(lblMensagem, "Livro removido com sucesso!");
                     }
                 }
-                default -> lblErro.setText("Selecione ID ou Título primeiro.");
+                default -> exibirErro(lblMensagem, "Selecione ID ou Título primeiro.");
             }
         });
 
         btnVoltar.setOnAction(e -> navegar(telaMenu()));
-        btnVoltar.getStyleClass().add("btnPrincipais");
         return container;
     }
 
@@ -201,11 +211,12 @@ public class App extends Application {
         TextField fdAutor  = new TextField();
         fdAutor.getStyleClass().add("text-field");
         CheckBox  lido        = new CheckBox("Lido");
-        Label     lblErro     = new Label();
+        Label     lblMensagem  = new Label();
         Button    btnUpdate   = new Button("Atualizar");
         Button    btnVoltar   = new Button("Voltar");
 
         HBox hbAcoes = new HBox(10);
+        btnVoltar.getStyleClass().add("btnPrincipais");
         hbAcoes.getChildren().addAll(btnUpdate, btnVoltar);
         
         container.getChildren().addAll(
@@ -213,30 +224,28 @@ public class App extends Application {
             campoForm("Título: ", fdTitulo),
             campoForm("Autor: ",  fdAutor),
             lido,
-            lblErro,
+            lblMensagem,
             hbAcoes
         );
 
         btnUpdate.setOnAction(e -> {
             if (fdId.getText().isBlank() || fdTitulo.getText().isBlank() || fdAutor.getText().isBlank()) {
-                lblErro.setText("Ops! Preencha todos os campos.");
+                exibirErro(lblMensagem, "Ops! Preencha todos os campos.");
             } else {
             	try {
-            		lblErro.setText("");
                     repositorio.update(Integer.parseInt(fdId.getText()), fdAutor.getText(), fdTitulo.getText(), lido.isSelected());
                     fdId.clear();
                     fdTitulo.clear();
                     fdAutor.clear();
                     lido.setSelected(false);
+                    exibirSucesso(lblMensagem, "Livro atualizado com sucesso!");
             	}catch (NumberFormatException error) {
-            		lblErro.setText("Erro: Id inválido insira apenas números. ");
-            	}
+                    exibirErro(lblMensagem, "Erro: ID inválido, insira apenas números.");            	}
                 
             }
         });
 
         btnVoltar.setOnAction(e -> navegar(telaMenu()));
-        btnVoltar.getStyleClass().add("btnPrincipais");
         return container;
     }
     private Node telaBuscar() {
@@ -256,27 +265,27 @@ public class App extends Application {
         
         TextField fdBusca = new TextField();
         fdBusca.getStyleClass().add("text-field");
-        fdBusca.getStyleClass().add("text-field");
 
 
         HBox hbCampo = new HBox(10);
         hbCampo.getChildren().setAll(new Label("Título:"), fdBusca);
 
-        Label lblErro      = new Label();
+        Label  lblMensagem  = new Label();
         Label lblResultado = new Label();
         Button btnProcurar = new Button("Procurar");
         Button btnVoltar   = new Button("Voltar");
 
         HBox hbAcoes = new HBox(10);
+        btnVoltar.getStyleClass().add("btnPrincipais");
         hbAcoes.getChildren().addAll(btnProcurar, btnVoltar);
         
 
-        container.getChildren().addAll( hbCampo, hbRadios, hbAcoes, lblErro,lblResultado);
+        container.getChildren().addAll( hbCampo, hbRadios, hbAcoes,lblMensagem ,lblResultado);
 
         // Atualiza o label do campo quando o radio muda
         group.selectedToggleProperty().addListener((obs,anterior,atual) -> {
             fdBusca.clear();
-            lblErro.setText("");
+            lblMensagem.setText("");
             lblResultado.setText("");
             if (atual == rbTitulo) hbCampo.getChildren().setAll(new Label("Título:"), fdBusca);
             if (atual == rbAutor)  hbCampo.getChildren().setAll(new Label("Autor:"),  fdBusca);
@@ -284,11 +293,11 @@ public class App extends Application {
         });
 
         btnProcurar.setOnAction(e -> {
-            lblErro.setText("");
+            lblMensagem.setText("");
             lblResultado.setText("");
 
             if (fdBusca.getText().isBlank()) {
-                lblErro.setText("Preencha o campo de busca.");
+            	exibirErro(lblMensagem, "Preencha o campo de busca.");
                 return;
             }
 
@@ -303,13 +312,12 @@ public class App extends Application {
                 try {
                     lblResultado.setText(repositorio.buscarPorId(Integer.parseInt(fdBusca.getText())));
                 } catch (NumberFormatException ex) {
-                    lblErro.setText("ID inválido! Digite apenas números.");
+                	 exibirErro(lblMensagem, "ID inválido! Digite apenas números.");
                 }
             }
         });
 
         btnVoltar.setOnAction(e -> navegar(telaMenu()));
-        btnVoltar.getStyleClass().add("btnPrincipais");
         return container;
     }
 
