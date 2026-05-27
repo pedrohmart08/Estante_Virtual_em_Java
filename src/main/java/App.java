@@ -1,5 +1,4 @@
-package application;
-
+import java.net.URL;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -21,13 +20,13 @@ import repository.Repositorio;
 public class App extends Application {
     private Repositorio repositorio = new Repositorio();
     private VBox root;
-    String cssPath = getClass().getResource("/view/style.css").toExternalForm();
 
     @Override
     public void start(Stage primaryStage) {
         root = new VBox(30);
         root.getChildren().add(telaMenu());
-        root.getStylesheets().add(cssPath);
+        URL cssUrl = getClass().getResource("/style.css");
+        if (cssUrl != null) root.getStylesheets().add(cssUrl.toExternalForm());
         
         primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.setTitle("EstantX Virtual ");
@@ -208,7 +207,7 @@ public class App extends Application {
 
         HBox hbAcoes = new HBox(10);
         hbAcoes.getChildren().addAll(btnUpdate, btnVoltar);
-
+        
         container.getChildren().addAll(
             campoForm("ID: ",     fdId),
             campoForm("Título: ", fdTitulo),
@@ -222,12 +221,17 @@ public class App extends Application {
             if (fdId.getText().isBlank() || fdTitulo.getText().isBlank() || fdAutor.getText().isBlank()) {
                 lblErro.setText("Ops! Preencha todos os campos.");
             } else {
-                lblErro.setText("");
-                repositorio.update(Integer.parseInt(fdId.getText()), fdAutor.getText(), fdTitulo.getText(), lido.isSelected());
-                fdId.clear();
-                fdTitulo.clear();
-                fdAutor.clear();
-                lido.setSelected(false);
+            	try {
+            		lblErro.setText("");
+                    repositorio.update(Integer.parseInt(fdId.getText()), fdAutor.getText(), fdTitulo.getText(), lido.isSelected());
+                    fdId.clear();
+                    fdTitulo.clear();
+                    fdAutor.clear();
+                    lido.setSelected(false);
+            	}catch (NumberFormatException error) {
+            		lblErro.setText("Erro: Id inválido insira apenas números. ");
+            	}
+                
             }
         });
 

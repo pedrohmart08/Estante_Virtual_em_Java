@@ -1,1 +1,12 @@
-lib/javafx-sdk-21.0.11
+
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+
+.settings/
+.project
+.classpath
+.metadata
+
